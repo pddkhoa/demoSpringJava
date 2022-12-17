@@ -6,6 +6,7 @@ import com.example.demo.service.UserServiceStub;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +26,22 @@ public class UserController {
         return "index.html";
     }
 
-    @PostMapping("/addUser")
-    public User addUser(@RequestBody User user)
-    {
-        return UserServiceStub.addUser(user);
+    @GetMapping("/add")
+    public String showNewForm(Model model){
+        model.addAttribute("user",new User());
+        model.addAttribute("pageTitle", "Add New User");
+        return "add_user";
     }
-
+    @PostMapping("/users/save")
+    public String saveUser(User user, RedirectAttributes ra) {
+        UserServiceStub.addUser(user);
+        ra.addFlashAttribute("message", "The user has been saved successfully.");
+        return "redirect:/";
+    }
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Integer id, Model model, RedirectAttributes ra){
+        UserServiceStub.deleteUser(id);
+        ra.addFlashAttribute("message","The user ID " + id + " has been deleted.");
+        return "redirect:/";
+    }
 }

@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class UserServiceStub {
     private static Map<Integer, User> userMap = new HashMap<>();
+    private List<User> list = new ArrayList<User>();
+
     private static int index = 2;
     static {
         User user1 = new User(1, "Khoa");
@@ -29,6 +31,13 @@ public class UserServiceStub {
         user.setId(index);
         userMap.put(index,user);
         return user;
+    }
+    public User save(User user) {
+        User product = new User();
+        product.setId(user.getId());
+        product.setName(user.getName());
+        list.add(product);
+        return product;
     }
     public static User deleteUser(int userid)
     {
